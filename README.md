@@ -71,6 +71,7 @@ Team_B9_DP/
 |---|---|
 | [`Part1_Findings.md`](Team_B9_Findings/Part1_Findings/Part1_Findings.md) | Written findings: each pattern, its participating classes, and why it qualifies |
 | [`data/patterns.csv`](Team_B9_Findings/Part1_Findings/data/patterns.csv) | Table of the confirmed patterns |
+| [`data/llm.csv`](Team_B9_Findings/Part1_Findings/data/llm.csv) | LLM chat links of each member |
 | [`data/rejected_candidates.csv`](Team_B9_Findings/Part1_Findings/data/rejected_candidates.csv) | Patterns we considered and rejected, with the reason for each |
 | [`data/pattern_counts.csv`](Team_B9_Findings/Part1_Findings/data/pattern_counts.csv) | Summary counts |
 | [`diagrams/`](Team_B9_Findings/Part1_Findings/diagrams/) | UML diagrams for Observer and Composite, plus an architecture diagram (`.png` images, `.puml` sources) |
