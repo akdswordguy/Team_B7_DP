@@ -1,4 +1,4 @@
-# Aditya — Case-study artifacts
+# Case-study artifacts
 
 This directory contains the collected Part 1 findings, Part 2 change evidence and code snapshots, Part 3 cross-language examples, LLM records, and the current report draft.
 
