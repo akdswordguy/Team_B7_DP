@@ -4,9 +4,8 @@ This directory contains the collected Part 1 findings, Part 2 change evidence an
 
 ## Report
 
-- `report/casestudy.tex` is the only report source found in the original workspace. It is a draft, and its local evidence links are adjusted for this folder layout.
-- No `A1_Report_Overleaf.tex` was found.
-- No final PDF is included. The existing `DP_Csestudy.pdf` was stale; a TeX compiler was unavailable, so it was neither overwritten nor copied as final.
+- The report sources and compiled PDFs are in the repository-level `report/` folder: `main.tex` (full case-study report) and `part1_findings.tex`, `part2_findings.tex`, `part3_findings.tex` (per-part findings), each with its PDF.
+- The `report/casestudy.tex` draft and `screenshots/` folder listed in `COPY_MANIFEST.md` were not included when this folder was published.
 
 ## Part 1
 
@@ -19,7 +18,7 @@ The audited findings confirm exactly two GoF patterns and two instances: Observe
 - `Part2/CH02-barcode-picking/` is an independent Spring Boot reference implementation because the canonical Picking repository was inaccessible.
 - `Part2/CH03-stock-reorder/` is an independent Spring Boot reference implementation because the canonical Inventory repository was inaccessible.
 
-CH02 and CH03 must not be described as merged into canonical OpenWMS services or deployed. Their evidence files describe behavior, tests, metrics, and limitations. CH03 state is in memory with single-process synchronization and does not claim a new GoF pattern.
+CH02 and CH03 must not be described as merged into canonical OpenWMS services or deployed. Their evidence files describe behavior, tests, metrics, and limitations. Their BEFORE/AFTER commit IDs refer to the original local project histories, which are not included in this repository. CH03 state is in memory with single-process synchronization and does not claim a new GoF pattern.
 
 ## Part 3 and LLM records
 

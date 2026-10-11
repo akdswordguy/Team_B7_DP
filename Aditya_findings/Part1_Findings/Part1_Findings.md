@@ -51,7 +51,13 @@ Each candidate is classified as one of:
 - `SimpleEventDispatcher.java:99-106` obtains the subscribed listeners and invokes `onEvent(event)` for each listener.
 - `RootApplicationEvent.java:23-29` establishes the event base type used by the dispatcher/listener collaboration.
 
-**Verification:** Confirmed from source. The collaboration explicitly supports subscribe/unsubscribe and notification. No separate GoF `Subject` class is invented; the subject responsibility is distributed between `EventBroker`, `EventDispatcher`, and `SimpleEventDispatcher`.
+**Verification:** Confirmed from source. The collaboration explicitly supports subscribe/unsubscribe and notification. No separate GoF `Subject` class is invented; the subject responsibility is distributed between `EventBroker` (attach/detach), `EventDispatcher` (notify), and `SimpleEventDispatcher` (ConcreteSubject).
+
+**Observations and limitations (added in the 2026-10-11 re-audit):**
+- *Exact-type matching.* `SimpleEventDispatcher.java:103` looks up listeners with `subscriptions.get(event.getClass())`. A listener subscribed to `RootApplicationEvent` is therefore not notified of a subclass event such as `UserChangedEvent`; subscriptions do not follow the event class hierarchy.
+- *Synchronous notification.* `EventDispatcher.java:28-29` leaves sync/async delivery undefined; `SimpleEventDispatcher.java:27-29` states that subscribers are called sequentially and synchronously. Asynchrony is added only by the separate `NonBlockingEventPublisherImpl` (N01).
+- *No ConcreteObserver in scope.* No class in the 64 Java files implements `EventListener`. The repository supplies the Observer infrastructure; concrete observers are expected in the separate service repositories. The instance is therefore confirmed at library level.
+- *Publisher is a client, not a participant.* `NonBlockingEventPublisherImpl` calls `EventDispatcher.dispatch`; in GoF terms that makes it a client that triggers notification, which is why it is recorded under N01 rather than counted as an Observer participant.
 
 ### P02 — Composite: org.openwms.core.util.TreeNode composite tree
 
@@ -77,6 +83,10 @@ Each candidate is classified as one of:
 
 **Verification:** Confirmed from source as the GoF Composite collaboration in the repository. The source demonstrates a common component abstraction, recursive child containment, and uniform treatment of child nodes via the same `TreeNode` interface. The implementation does not invent a separate leaf class; instead, it treats leaf state as `childrenMap.isEmpty()`. However, no concrete application/domain client usage of `TreeNode`/`TreeNodeImpl` was found anywhere in the accessible repository; this limitation is recorded explicitly rather than inferred.
 
+**Observations and limitations (added in the 2026-10-11 re-audit):**
+- *Transparent Composite, single implementation class.* Child-management operations are declared on the component interface (`TreeNode.java:82-115`), which is the GoF "transparent" variant. There are no separate Leaf and Composite classes: `TreeNodeImpl` plays both roles and "leaf" is a runtime state (`isLeaf()` = `childrenMap.isEmpty()`), not a type.
+- *No recursive component operation.* GoF Composite normally has a component operation that a composite forwards to its children. `TreeNode` declares only data access, navigation (`getChildren`, `getChild`, `getParent`) and child management; any traversal is left to the client. The classification therefore rests on recursive structure and uniform interface, not on recursive behaviour. (The Part 3 Composite implementations do include a recursive `traverse` operation.)
+
 ## Confirmed non-GoF patterns / mechanisms
 
 ### N01 — Event-driven / Publish-Subscribe mechanism
@@ -95,13 +105,13 @@ Classification: framework idiom. It is not counted as a second GoF Observer inst
 
 `FireAfterTransactionAspect.java:30-36` documents the aspect's purpose of firing events after method/transaction completion. Lines 52-66 establish the Spring component and injected `ApplicationContext`; lines 76-85 and 95-107 publish configured events, including asynchronous publication.
 
-Classification: AOP/framework mechanism, not a GoF pattern.
+Classification: intended AOP advice; not a GoF pattern. **Correction (2026-10-11 re-audit):** the AOP wiring itself is not present in this repository. `FireAfterTransactionAspect` is a plain Spring `@Component` (its imports at lines 18-27 contain no AspectJ types); no class in the repository is annotated `@Aspect`, no `@Around`/`@AfterReturning`/`@Pointcut` advice exists, no XML `aop:` configuration exists, and the `org.openwms.core.util` POM declares no AspectJ dependency. The class provides advice-shaped methods (`fireEvent`, `fireEventAsync`) whose Javadoc describes their use around Spring's transaction advice, but binding them to join points must happen in a consuming service. N03 is therefore recorded as *partially confirmed: advice methods present, interception wiring not in scope*.
 
 ## Rejected / not confirmed candidates
 
 | Candidate | Status | Reason |
 |---|---|---|
-| Singleton | Rejected as GoF evidence | Spring `@Component` or managed-bean behavior alone does not demonstrate intentional GoF Singleton structure. |
+| Singleton | Rejected as GoF evidence | Spring `@Component` or managed-bean behavior alone does not demonstrate intentional GoF Singleton structure. The candidate beans (`SimpleEventDispatcher`, `NonBlockingEventPublisherImpl`, `LocalServiceInitializer`, `FireAfterTransactionAspect`) all have public constructors and no static instance or access method; they are single only because the Spring container scopes them that way. |
 | Proxy | Rejected as GoF evidence | Framework-generated proxies/AOP behavior is not counted as an application-level GoF Proxy. |
 
 ## Baseline totals
@@ -118,7 +128,7 @@ Classification: AOP/framework mechanism, not a GoF pattern.
 
 - Event-driven / Publish-Subscribe mechanism: 1 confirmed architectural observation
 - Spring Application Event Listener: 1 confirmed framework idiom
-- AOP / transaction-event mechanism: 1 confirmed framework mechanism
+- AOP / transaction-event mechanism: 1 partially confirmed framework mechanism (advice methods present; aspect wiring not in this repository)
 
 These three are deliberately kept separate from the GoF totals.
 

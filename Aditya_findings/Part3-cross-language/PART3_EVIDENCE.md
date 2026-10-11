@@ -177,3 +177,7 @@ The eight implementations here are independent reference implementations of thos
 - These tiny programs' observed process times are dominated by process/runtime startup overhead; they are not general language-performance benchmarks, and no language is claimed to be universally faster.
 - Framework-specific behavior was avoided; Java uses only the JDK, Python uses `unittest`, JavaScript uses Node's built-in assertion module, and C++ uses the standard library and `assert`.
 - The Observer test harnesses are executable checks rather than a common cross-language test framework, so framework reporting formats differ while scenarios and assertions remain equivalent.
+
+## Independent re-run (2026-10-11)
+
+All eight harnesses were re-run on a second machine (Linux) with OpenJDK 21.0.12.1, Python 3.13.16, Node.js v22.22.0 and g++ 13.3.0 (`-std=c++20 -Wall -Wextra -Werror -pedantic`). The results were again Observer 3/3 and Composite 4/4 in every language, for 28/28 in total. Physical LOC for all sixteen files and Lizard 1.24.1 maximum CCN for all eight directories were recomputed and match the tables above exactly. Timing was not re-measured.

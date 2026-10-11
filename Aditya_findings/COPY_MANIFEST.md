@@ -13,8 +13,8 @@ parent `DP` workspace were left untouched. The copied case-study bundle contains
 | `Part2/CH03-stock-reorder/` | The complete project files, tests, resources, evidence, class diagram, and Maven build file from `CH03-stock-reorder/`. |
 | `Part3-cross-language/` | Language implementations, tests, metrics, and evidence from `Part3-cross-language/`. |
 | `LLM_RECORDS/LLM_RECORDS.md` | A publication copy of `LLM_RECORDS.md`; machine-specific paths and reviewer identity are redacted. |
-| `report/casestudy.tex` | The report draft from `casestudy.tex`, with evidence links adjusted for this folder layout. |
-| `screenshots/` | Empty: no source screenshots were found. |
+| `report/casestudy.tex` | Listed in the original copy plan but **not present** in the published repository; superseded by the repository-level `report/` folder. |
+| `screenshots/` | Listed in the original copy plan but **not present** (it was empty, and Git does not track empty folders). |
 
 The audited staging copy was sourced from `team-b9/Aditya/`, whose source map is
 in `team-b9/INVENTORY_REPORT.md`. No `.git` directories or Maven `target`
