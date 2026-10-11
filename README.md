@@ -1,4 +1,4 @@
-# Team B9 — Design Patterns Case Study (23CSE455)
+# Team B7 — Design Patterns Case Study (23CSE455)
 
 **Design Pattern Identification and Evolution in a Spring MVC-Based Warehouse Management Application**
 
