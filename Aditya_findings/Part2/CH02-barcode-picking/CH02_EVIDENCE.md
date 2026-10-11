@@ -177,3 +177,9 @@ Run the full tests and verification from `CH02-barcode-picking/`:
 mvn.cmd test
 mvn.cmd verify
 ```
+
+## Re-audit note (2026-10-11)
+
+- The BEFORE and AFTER commit IDs cited above come from the original local project repository. That Git history was not copied into `Team_B9_DP`, so the commits cannot be checked out from the submission repository, and the BEFORE metrics cannot be reproduced from it. Only the AFTER source tree is published here.
+- The AFTER tree in this repository was re-measured and matches the table above exactly (file counts, physical Java LOC, and the number of `@Test` methods).
+- Maven could not be re-run during the re-audit because the audit environment blocked Maven Central; the recorded `BUILD SUCCESS` results are the team's original runs.

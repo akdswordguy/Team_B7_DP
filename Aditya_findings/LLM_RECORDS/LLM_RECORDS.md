@@ -256,6 +256,20 @@ These results verify the recorded build and test runs for the uncommitted CH01 i
 **Verification result:** CONFIRMED for the recorded tests, metrics, timing methodology, and protected repository state.
 **Limitations:** Timings include process start-up and are not general language performance results. LOC is physical lines. Cyclomatic complexity depends on Lizard 1.24.1 parsers. Exact prompt/model/access-tier/date metadata is not present in the workspace.
 
+## Record AUDIT-01 — Cross-check of all findings against upstream OpenWMS and report correction
+
+**Date:** 2026-10-11
+**Tool:** Claude (claude.ai, agentic session with shell access)
+**Model:** Claude Opus 5.5
+**Access tier:** Not recorded.
+**Exact prompt:** Yes, reproduced in Appendix A-4.
+**Input:** This repository (`Team_B9_DP`), the team's `main.tex` report draft, and fresh clones of `openwms/org.openwms` at `9d263bf`, `openwms/org.openwms.common.service.lib` at `a6566d7`, and `openwms/org.openwms.common.service` at `fc7edd4`.
+**Output:** Corrections to `Part1_Findings.md`, `patterns.csv`, `rejected_candidates.csv`, `verification_notes.md`, the Observer and Composite PlantUML diagrams, re-audit notes in the CH01/CH02/CH03/Part 3 evidence files, a corrected `report/main.tex`, and new `report/part1_findings.tex`, `part2_findings.tex` and `part3_findings.tex` with compiled PDFs.
+**Human verification:** Pending review by the team member who requested the audit (Mithun Krishna) and the rest of Team B9.
+**Verification evidence:** Every Part 1 line citation was compared with the upstream source; copied evidence files were byte-compared with upstream; the CH01 changed-file list was re-derived by diffing against upstream; CH02/CH03 file counts, LOC and `@Test` counts were recomputed; all eight Part 3 harnesses were re-run (28/28) and LOC/CCN recomputed. Maven builds could not be re-run because Maven Central was blocked in the audit environment.
+**Verification result:** PARTIALLY VERIFIED — static and Part 3 runtime checks re-executed; Maven totals remain the team's recorded runs.
+**Limitations:** LLM-produced corrections; each must be checked by the team before submission.
+
 ## Record inventory summary
 
 | Record | Part/activity | Verification result | Exact prompt in this file |
@@ -267,6 +281,7 @@ These results verify the recorded build and test runs for the uncommitted CH01 i
 | CH03-01 | CH03 reference implementation | CONFIRMED for recorded tests/commits and no-new-GoF statement | No |
 | P3-01 | Part 3 cross-language implementations | CONFIRMED for 28/28 checks | Yes, Appendix A-2 |
 | P3-02 | Part 3 metrics audit | CONFIRMED for re-executed tests and metrics | Yes, Appendix A-3 |
+| AUDIT-01 | Cross-check against upstream and report correction | PARTIALLY VERIFIED (team review pending) | Yes, Appendix A-4 |
 
 The following historical prompts were present verbatim in the available conversation context and are reproduced below for their corresponding records. No unavailable CH01 initial, CH02, CH03, or Part 1 pattern-analysis prompt has been reconstructed.
 
@@ -1117,4 +1132,16 @@ Finally report:
 6. cross_language.csv path
 7. PART3_EVIDENCE.md path
 8. any metric that could not be measured
+```
+
+### Appendix A-4 — Re-audit and report-correction prompt (AUDIT-01)
+
+```text
+https://github.com/akdswordguy/Team_B9_DP.git
+
+
+this is the repo we are working in i am now a contributor as well
+what i need to do is go through the finding cross checkk everything is right compared to the original github warehouse thingy as i said
+now then after that i was also asked to make a pdf on the finding of each part1,2,3 with correct info as necessary and with same formattign as the already given tex and all
+edit and correct any incorrect info and things
 ```

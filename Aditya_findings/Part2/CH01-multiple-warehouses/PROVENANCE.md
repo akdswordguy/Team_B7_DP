@@ -98,3 +98,26 @@ No untracked CH01 files were reported for this repository at the recorded audit.
 - Both Maven invocations emitted the warning that `forkCount=0` may reduce test accuracy. The Library build also logged Asciidoctor errors for an unavailable generated snippet and invalid part structure, despite Maven's `BUILD SUCCESS`.
 
 Production locations still require deployment-provided Warehouse mapping. No production migration/backfill, Flyway/Liquibase migration, deployment, or CH01 before/after LOC measurement is evidenced.
+
+## Re-audit (2026-10-11)
+
+The changed-file lists above were re-derived by comparing `org.openwms.common.service.lib.complete-source/` and `org.openwms.common.service.complete-source/` with fresh clones of the upstream repositories at the stated baselines. The result matches exactly: 31 modified and 13 new files in the Library (226 upstream Java files + 12 new = 238), and 2 modified files in Common Service. The partial snapshots are byte-identical to the complete-source copies, apart from a UTF-8 byte-order mark on the partial Common Service `README.md`.
+
+### CH01 test methods (named in source)
+
+The focused CH01 tests are identifiable by name in the snapshot; 18 test methods were added (245 `@Test` annotations upstream, 263 after).
+
+| Acceptance criterion | Test method(s) |
+|---|---|
+| Same coordinates in different warehouses | `LocationTest.same_coordinates_in_different_warehouses_are_distinct_locations`; `LocationIT.shall_allow_same_coordinates_in_different_warehouses`; `LocationServiceImplIT.shall_allow_same_location_id_in_different_warehouses_and_find_by_warehouse` |
+| Warehouse-qualified lookup / update | `TransportUnitServiceImplIT.update_with_warehouse_code_selects_the_requested_warehouse_for_duplicate_coordinates`; `TransportUnitCommandHandlerIT.creates_transport_units_at_the_same_coordinates_in_the_requested_warehouses` |
+| Ambiguous unqualified lookup is rejected | `TransportUnitServiceImplIT.update_without_warehouse_code_rejects_an_ambiguous_coordinate`; `TransportUnitCommandHandlerIT.rejects_unqualified_creation_when_the_coordinate_is_ambiguous` |
+| Unqualified lookup of a unique coordinate still works | `TransportUnitServiceImplIT.update_without_warehouse_code_resolves_a_unique_coordinate`; `TransportUnitCommandHandlerIT.creates_without_warehouse_when_the_coordinate_is_unique` |
+| Unknown warehouse is rejected | `LocationServiceImplIT.shall_reject_location_with_unknown_warehouse`; `WarehouseServiceImplIT.rejects_an_unknown_warehouse_code` |
+| Warehouse management | `WarehouseServiceImplIT.creates_and_retrieves_a_warehouse`; `WarehouseServiceImplIT.rejects_a_duplicate_warehouse_code` |
+| API/message carry warehouse code | `LocationServiceImplIT.location_api_and_message_carry_warehouse_code`; `LocationMOTest.warehouse_code_is_preserved_by_json_serialization` |
+| Legacy `LocationMO` constructor compatibility | `LocationMOTest.legacy_nine_argument_constructor_preserves_null_warehouse` |
+
+**Correction:** "Duplicate coordinates within one warehouse are rejected" is enforced by the `UC_LOC_ID` unique constraint on (`C_WAREHOUSE`, `C_AREA`, `C_AISLE`, `C_X`, `C_Y`, `C_Z`) in `Location.java` (CH01 added `C_WAREHOUSE`; the baseline constraint covered only the five coordinate columns), but no test exercises that rejection. Its status is *enforced by schema constraint, not tested*. PLC/ERP global uniqueness is enforced by `UC_LOC_PLC_CODE` and `UC_LOC_ERP_CODE`, which CH01 left unchanged from the baseline; there is no dedicated CH01 test for it.
+
+Maven could not be re-run during the re-audit (Maven Central was blocked in the audit environment); the 187/7 and 1/0 totals above are the team's recorded runs.
