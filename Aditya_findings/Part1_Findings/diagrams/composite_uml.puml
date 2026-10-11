@@ -1,0 +1,12 @@
+@startuml
+interface TreeNode<T>
+class TreeNodeImpl<T>
+
+TreeNodeImpl ..|> TreeNode
+TreeNode "1" o-- "0..*" TreeNode : children
+TreeNode "0..1" --> "1" TreeNode : parent
+TreeNode : +isLeaf()
+TreeNode : +getChild(id)
+TreeNode : +addChild(id, child)
+TreeNode : +removeChild(id)
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+interface EventBroker
+interface EventDispatcher
+interface EventListener
+class SimpleEventDispatcher
+class RootApplicationEvent
+
+EventDispatcher --|> EventBroker
+SimpleEventDispatcher ..|> EventDispatcher
+SimpleEventDispatcher "1" o-- "0..*" EventListener : subscriptions
+EventBroker ..> EventListener : subscribe/unsubscribe
+EventDispatcher ..> RootApplicationEvent : dispatch
+EventListener ..> RootApplicationEvent : onEvent(event)
+@enduml
